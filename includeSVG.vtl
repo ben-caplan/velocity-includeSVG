@@ -1,0 +1,29 @@
+#* INCLUDE SVG MACRO
+
+   -----------------------------------------------------
+   This macro is used to include a SVG file inline
+
+   USE:
+    #includeSVG( $relPath $domain )##
+    #includeSVG( '/common/svg/reboot/tb.gears.svg' )##
+    #includeSVG( '/common/svg/vt-logo.svg' 'vitamintalent.com' )##
+
+   OPTIONS:
+     $relPath = relative path to SVG file
+     $domain  = (optional) specify domain
+
+   RETURNS:
+     $svg output
+
+*#
+#macro( includeSVG $relPath $domain )##
+  #if( !$UtilMethods.isSet($domain) )##
+    #set( $domain = $request.getServerName() )##
+  #end##isSet($domain)
+  #set( $svg = $import.read("http://${domain}${relPath}") )##
+  #if( $UtilMethods.isSet($svg) )##
+    $svg
+  ## PROBABLY DON'T NEED TO MINIFY IT HERE
+  ##$svg.replaceAll("\s+", ' ').replaceAll("/\*[^\*]*\*/", '')##
+  #end##isSet($svg)
+#end##includeSVG()
